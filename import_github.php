@@ -1,9 +1,9 @@
 <?php
-//error_reporting(0); // Повідомлення про помилку не треба :) 
+error_reporting(0); // Повідомлення про помилку не треба :) 
 
-//https://github.com/settings/tokens
+// https://github.com/settings/tokens
 define("API_KEY", "1234567890abcdef1234567890abcdef12345678"); // Наш ключик
-define("REPO", "da411d/Github-updater"); // Автор/репозиторій
+define("REPO", "author/repo"); // Автор/репозиторій
 define("BRANCH", "master"); // Гілка
 define("DESTINATION", dirname(__FILE__)); // Пункт призначення
 define("STATUS", __FILE__.".status");
