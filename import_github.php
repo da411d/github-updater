@@ -2,7 +2,7 @@
 error_reporting(0); // Повідомлення про помилку не треба :) 
 
 // https://github.com/settings/tokens
-define("API_KEY", "1234567890abcdef1234567890abcdef12345678"); // Наш ключик
+define("API_KEY", "your-github-token"); // Наш ключик
 define("REPO", "author/repo"); // Автор/репозиторій
 define("BRANCH", "master"); // Гілка
 define("DESTINATION", dirname(__FILE__)); // Пункт призначення
