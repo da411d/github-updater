@@ -201,7 +201,7 @@ if($_POST["act"] == "start"){
 		
 		file_put_contents(STATUS, "Шаг 3: Распаковываем в временную папку"); sleep(1);
 		$tmpdest = DESTINATION . "/tmp-" . rand(); //Тимчасова папка
-		$folder = strtolower(explode("/", REPO)[1] . "-" . BRANCH); //Назва підпапки - репозиторій-гілка
+		$folder = explode("/", REPO)[1] . "-" . BRANCH; //Назва підпапки - репозиторій-гілка
 		
 		//Розпаковуєм в тимчасову папку
 		$zip->extractTo($tmpdest);
