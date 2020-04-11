@@ -187,7 +187,7 @@ if($_SERVER["REQUEST_METHOD"] !== "GET"){
       info.classList.remove("loader");
       
       if(resultText.toLowerCase() === "success"){
-        setTimeout(() => location.reload(), 3000);
+        setTimeout(() => location.assign("/"), 3000);
       }
     })();
   </script>
