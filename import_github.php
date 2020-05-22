@@ -32,7 +32,7 @@ if($_POST["act"] == "start"){
   }
   
   $mainDestination = rtrim(DESTINATION, "/\\");
-  $backupDestination = $mainDestination . ".bak-" . date("Y-m-d_H-i-s");
+  $backupDestination = $mainDestination . ".bak/bak-" . date("Y-m-d_H-i-s");
   $unzipDestination = $mainDestination . ".unzip-" . time();
   $tempDestination = $mainDestination . ".tmp-" . time();
   $targetSubfolder = explode("/", REPO)[1] . "-" . strtolower(BRANCH); //Назва підпапки: repoName-branch
@@ -59,6 +59,10 @@ if($_POST["act"] == "start"){
     $zip->extractTo($unzipDestination);
     $zip->close();
     
+    $backupDestinationParent = dirname($backupDestination);
+    if(!file_exists($backupDestinationParent)){
+      mkdir($backupDestinationParent);
+    }
     // Робим рокіровку
     rename($unzipDestination . "/" . $targetSubfolder, $tempDestination);
     rename($mainDestination, $backupDestination);
