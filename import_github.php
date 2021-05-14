@@ -23,25 +23,23 @@ define("DESTINATION", dirname(__FILE__));
 define("LOCKFILE", dirname(__FILE__) . ".lock");
 
 
-
-
-
-if($_POST["act"] == "start"){
+/* ВСЬО ЩО ДАЛЬШЕ - НЕ ТРОГАТИ */
+if ($_POST["act"] == "start") {
   // Перевірка ключа безпеки
   $securityKeySeed = $_POST["seed"] ?? "";
   $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
   $securityPass = $_POST[$securityKeyKey] ?? "";
-  if (SECURITY !== false && (empty($securityPass) || $securityPass !== SECURITY)){
+  if (SECURITY !== false && (empty($securityPass) || $securityPass !== SECURITY)) {
     die("Invalid security key");
   }
   
   // Щоб випадково не затерти зміни, зроблені на локалці
-  if($_SERVER["REMOTE_ADDR"] == "127.0.0.1"){
+  if ($_SERVER["REMOTE_ADDR"] == "127.0.0.1") {
     die("Denied for localhost");
   }
   
   $lockfile = fopen(LOCKFILE, "w+");
-  if (!flock($lockfile, LOCK_EX | LOCK_NB)){
+  if (!flock($lockfile, LOCK_EX | LOCK_NB)) {
     die("Unable to obtain lock, the previous process is still going on");
   }
   
@@ -50,8 +48,8 @@ if($_POST["act"] == "start"){
   $unzipDestination = $mainDestination . ".unzip-" . time();
   $tempDestination = $mainDestination . ".tmp-" . time();
   $targetSubfolder = explode("/", REPO)[1] . "-" . strtolower(BRANCH); //Назва підпапки: repoName-branch
-  $downloadZipFilename = $mainDestination . ".zip-". time() . ".zip";
-
+  $downloadZipFilename = $mainDestination . ".zip-" . time() . ".zip";
+  
   // Скачуєм файл
   $url = "https://github.com/" . REPO . "/archive/" . BRANCH . ".zip";
   $ch = curl_init();
@@ -69,12 +67,12 @@ if($_POST["act"] == "start"){
   // Відкриваєм архів
   $zip = new ZipArchive;
   $isOpen = $zip->open($downloadZipFilename);
-  if($isOpen === true){
+  if ($isOpen === true) {
     $zip->extractTo($unzipDestination);
     $zip->close();
     
     $backupDestinationParent = dirname($backupDestination);
-    if(!file_exists($backupDestinationParent)){
+    if (!file_exists($backupDestinationParent)) {
       mkdir($backupDestinationParent);
     }
     // Робим рокіровку
@@ -87,19 +85,19 @@ if($_POST["act"] == "start"){
     
     echo "Success";
     
-  }else{
+  } else {
     echo "Unable to unzip";
   }
   
   // Видаляєм архів
   unlink($downloadZipFilename);
-
+  
   flock($lockfile, LOCK_UN);
   fclose($lockfile);
   unlink(LOCKFILE);
 }
 
-if($_SERVER["REQUEST_METHOD"] !== "GET"){
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
   die();
 }
 
@@ -110,7 +108,7 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
 <html>
 
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="theme-color" content="#ffffff">
   <meta name="msapplication-navbutton-color" content="#ffffff">
@@ -118,54 +116,56 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="HandheldFriendly" content="True">
-  <meta charset="UTF-8" >
+  <meta charset="UTF-8">
   <title>Github Updater</title>
   <style>
-    *{
+    * {
       box-sizing: border-box;
     }
-    html{
+    
+    html {
       font-size: 20px;
     }
-    body{
+    
+    body {
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
       padding: 16px;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     }
     
-    p{
+    p {
       margin: 0;
     }
     
-    p:not(:last-child){
+    p:not(:last-child) {
       margin-bottom: 1em;
     }
     
-    .popup{
+    .popup {
       width: 500px;
       padding: 2rem 3rem;
       text-align: center;
-      border-radius: 17px;
-      font-family: "Tahoma";
+      border-radius: 1rem;
       box-shadow: 0 0 2rem rgba(0, 0, 0, 0.3);
       color: #242424;
     }
     
-    .js-info{
+    .js-info {
       color: #1799fb;
       font-size: 1.5rem;
     }
     
-    .loader{
+    .loader {
       display: block;
       text-align: center;
       height: 2rem;
     }
     
-    .loader:after{
+    .loader:after {
       content: '';
       display: inline-block;
       width: 2rem;
@@ -177,43 +177,47 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
       animation: spin 0.5s infinite linear;
     }
     
-    @keyframes spin{
-      from{transform: rotate(0deg);}
-      to{transform: rotate(360deg);}
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="popup">
-    <p class="title">Идет процесс импорта из репозитория</p>
-    <p class="js-info"></p>
-  </div>
-  
-  <script>
-    (async () => {
-      const info = document.querySelector(".js-info");
-      info.classList.add("loader");
-      
-      const formData = new FormData();
-      formData.append("act", "start");
-      formData.append("seed", "<?php echo $securityKeySeed; ?>");
-      formData.append("<?php echo $securityKeyKey; ?>", location.hash.substr(1));
-      history.replaceState({}, null, "#");
-      
-      const resultText = await fetch("?", {
-        method: "POST",
-        body: formData,
-      }).then(response => response.text());
-      
-      info.innerText = resultText;
-      info.classList.remove("loader");
-      
-      if(resultText.toLowerCase() === "success"){
-        setTimeout(() => location.assign("/"), 3000);
-      }
-    })();
-  </script>
+<div class="popup">
+  <p class="title">Идет процесс импорта из репозитория</p>
+  <p class="js-info"></p>
+</div>
+
+<script>
+  (async () => {
+    const info = document.querySelector(".js-info");
+    info.classList.add("loader");
+    
+    const formData = new FormData();
+    formData.append("act", "start");
+    formData.append("seed", "<?php echo $securityKeySeed; ?>");
+    formData.append("<?php echo $securityKeyKey; ?>", location.hash.substr(1));
+    history.replaceState({}, null, "#");
+    
+    const resultText = await fetch("?", {
+      method: "POST",
+      body: formData,
+    }).then(response => response.text());
+    
+    info.innerText = resultText;
+    info.classList.remove("loader");
+    
+    if (resultText.toLowerCase() === "success") {
+      setTimeout(() => location.assign("/"), 3000);
+    }
+  })();
+</script>
 </body>
 
 <!--
