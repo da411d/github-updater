@@ -1,6 +1,12 @@
 <?php
 error_reporting(0); // Повідомлення про помилку не треба :)
 
+// Код безпеки. Можна любі букви-цифри, бажано більше восьми і менше 128
+// Залишити false якщо не потрібен
+// Код передається в URL після #:
+// https://example.com/path/to/import_github.php#SOME-RANDOM-STRING-HERE-1234567890
+define("SECURITY", "SOME-RANDOM-STRING-HERE-1234567890");
+
 // Токен отримати можна тут: https://github.com/settings/tokens
 define("API_TOKEN", "1234567890abcdef1234567890abcdef12345678");
 
@@ -21,9 +27,17 @@ define("LOCKFILE", dirname(__FILE__) . ".lock");
 
 
 if($_POST["act"] == "start"){
+  // Перевірка ключа безпеки
+  $securityKeySeed = $_POST["seed"] ?? "";
+  $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
+  $securityPass = $_POST[$securityKeyKey] ?? "";
+  if (SECURITY !== false && (empty($securityPass) || $securityPass !== SECURITY)){
+    die("Invalid security key");
+  }
+  
   // Щоб випадково не затерти зміни, зроблені на локалці
   if($_SERVER["REMOTE_ADDR"] == "127.0.0.1"){
-    die();
+    die("Denied for localhost");
   }
   
   $lockfile = fopen(LOCKFILE, "w+");
@@ -89,6 +103,8 @@ if($_SERVER["REQUEST_METHOD"] !== "GET"){
   die();
 }
 
+$securityKeySeed = rand();
+$securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -181,6 +197,9 @@ if($_SERVER["REQUEST_METHOD"] !== "GET"){
       
       const formData = new FormData();
       formData.append("act", "start");
+      formData.append("seed", "<?php echo $securityKeySeed; ?>");
+      formData.append("<?php echo $securityKeyKey; ?>", location.hash.substr(1));
+      history.replaceState({}, null, "#");
       
       const resultText = await fetch("?", {
         method: "POST",
