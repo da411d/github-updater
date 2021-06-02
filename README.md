@@ -16,7 +16,7 @@
 Готово!
 
 Тепер при переході по адресу скрипта Ваш репозиторій буде завантажуватись і обновлятись, а по закінченню перекидати в корінь проекта.
-Демку можна глянути тут: https://by.daki.me/GHUpdater/import_github.php
+Демку можна глянути тут: https://by.daki.me/GHUpdater/import_github.php#SOME-RANDOM-STRING-HERE-1234567890
 
 
 ## TODO
