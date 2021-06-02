@@ -8,7 +8,7 @@ error_reporting(0); // Повідомлення про помилку не тр�
 define("SECURITY", "SOME-RANDOM-STRING-HERE-1234567890");
 
 // Токен отримати можна тут: https://github.com/settings/tokens
-define("API_TOKEN", "1234567890abcdef1234567890abcdef12345678");
+define("API_TOKEN", "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789");
 
 // Репозиторій в форматі author/repoName
 define("REPO", "author/repoName");
