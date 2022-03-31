@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
 $securityKeySeed = rand();
 $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 
 <head>
@@ -134,7 +134,7 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
       min-height: 100vh;
       margin: 0;
       padding: 16px;
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
     
     p {
@@ -190,7 +190,7 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
 
 <body>
 <div class="popup">
-  <p class="title">Идет процесс импорта из репозитория</p>
+  <p class="title">Repository import in progress</p>
   <p class="js-info"></p>
 </div>
 
@@ -222,6 +222,6 @@ $securityKeyKey = "_" . sha1($securityKeySeed . SECURITY);
 
 <!--
   Code written by David Manzhula @da411d
-  https://daki.me/
+  https://da411d.me/
 -->
 </html>
