@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="HandheldFriendly" content="True">
+  <meta charset="UTF-8">
+  <title>Github Updater</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    html {
+      font-size: 20px;
+    }
+    
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    }
+    
+    p {
+      margin: 0;
+    }
+    
+    p:not(:last-child) {
+      margin-bottom: 1em;
+    }
+    
+    .popup {
+      width: 500px;
+      padding: 2rem 3rem;
+      text-align: center;
+      border-radius: 1rem;
+      box-shadow: 0 0 2rem rgba(0, 0, 0, 0.3);
+      color: #242424;
+    }
+    
+    .js-info {
+      color: #1799fb;
+      font-size: 1.5rem;
+    }
+    
+    .loader {
+      display: block;
+      text-align: center;
+      height: 2rem;
+    }
+    
+    .loader:after {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      border: 0.2rem solid transparent;
+      border-bottom-color: #1799fb;
+      border-left-color: #1799fb;
+      border-radius: 2rem;
+      animation: spin 0.5s infinite linear;
+    }
+    
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="popup">
+  <p class="title">Repository import in progress</p>
+  <p class="js-info"></p>
+</div>
+
+<script>
+  (() => {
+    const info = document.querySelector(".js-info");
+    info.classList.add("loader");
+    
+    // Увага!
+    // Цей файл для демонстрації вигляду скрипта оновлення
+    // Робочий скрипт - https://github.com/da411d/github-updater/blob/master/import_github.php
+    const securityKey = "SOME-RANDOM-STRING-HERE-1234567890";
+    const passedSecurityKey = location.hash.substr(1);
+    history.replaceState({}, null, "#");
+    
+    if(securityKey === passedSecurityKey){
+      setTimeout(() => {
+        info.innerText = "Success";
+        info.classList.remove("loader");
+        setTimeout(() => location.assign("https://github.com/da411d/github-updater"), 3000);
+      }, 5000)
+    }else{
+      info.innerText = "Invalid security key";
+      info.classList.remove("loader");
+    }
+    
+  })();
+</script>
+</body>
+
+<!--
+  Code written by David Manzhula @da411d
+  https://da411d.me/
+-->
+</html>
